@@ -1,0 +1,132 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Importación de la fuente vintage */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+/* Fondo y diseño general */
+body {
+    font-family: 'Cinzel', serif; /* Aplicar tipografía vintage */
+    color: white;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Fondo dividido */
+body::before,
+body::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+body::before {
+    top: 0;
+    height: 40vh;
+    background-image: url('imaganes/radio2.jpeg');
+}
+
+body::after {
+    top: 40vh; /* Ajustado para conectar las imágenes */
+    height: 60vh;
+    background-image: url('imaganes/background-tree-wood-boards.jpg');
+}
+
+/* Barra de navegación */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+    padding: 10px 20px;
+}
+
+.navbar .logo {
+    width: 50px;
+    height: 50px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-family: 'Cinzel', serif; /* Asegura la tipografía vintage en la barra */
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.nav-links a:hover {
+    color: red;
+    text-shadow: 0 0 5px red;
+}
+
+/* Contenido principal */
+.content {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30vh; /* Ajustado para ubicar el contenido más centrado */
+    position: relative;
+}
+
+.content h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-family: 'Cinzel', serif; /* Título con tipografía vintage */
+}
+
+/* Diseño del texto y las imágenes */
+.content-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 0 10%;
+    margin-top: 10px; /* Bajé el texto */
+}
+
+.content-body .text {
+    flex: 1;
+    font-size: 16px;
+    text-align: left;
+    font-family: 'Cinzel', serif; /* Texto con tipografía vintage */
+}
+
+.content-body .images {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: -50px; /* Mantener imágenes cerca del centro */
+}
+
+/* Estilo de marco de papel viejo */
+.content-body .images img {
+    width: 35%; /* Tamaño pequeño para que se vean todas */
+    height: auto;
+    border: 5px solid #e0c097; /* Color beige para el marco */
+    border-radius: 8px; /* Ligeramente redondeado */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 
+                inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombra interna y externa */
+    background-color: #f4ecd8; /* Color claro como fondo del marco */
+    transition: transform 0.3s;
+}
+
+.content-body .images img:hover {
+    transform: scale(1.1);
+}

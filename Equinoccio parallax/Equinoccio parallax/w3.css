@@ -1,0 +1,47 @@
+body {
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    background-image: url('/mnt/data/fondo%20equi.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.navbar {
+    background-color: black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar img {
+    height: 50px;
+}
+.navbar .menu {
+    display: flex;
+    gap: 20px;
+}
+.navbar .menu a {
+    color: #d8d8d8;
+    text-decoration: none;
+    font-weight: bold;
+}
+.navbar .menu a:hover {
+    color: #7f7f7f;
+}
+.instagram-section {
+    padding: 50px;
+    text-align: center;
+    position: relative;
+}
+.instagram-section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+}
+.instagram-section iframe {
+    width: 70%;
+    height: 500px;
+    border: none;
+    border-radius: 15px;
+}

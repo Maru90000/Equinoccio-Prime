@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambiente Nevado con Ecualizador</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        #logo {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 2;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        #info-text {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            font-size: 1.5em;
+            line-height: 1.5;
+            z-index: 3;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo principal en el techo -->
+    <img id="logo" src="logo.png" alt="Logo" width="150" height="150" />
+
+    <!-- Canvas del ecualizador -->
+    <canvas id="audioCanvas"></canvas>
+
+    <!-- Controles de audio -->
+    <div id="controls">
+        <input type="file" id="audioFile" accept="audio/mp3">
+        <audio id="audioPlayer" controls style="display: none;"></audio>
+    </div>
+
+    <!-- Texto informativo en la pared frontal -->
+    <div id="info-text">
+        JUE 12 ⚡ 2000's con KEPEX "La última del año ⚡<br>
+        La última de Kepex del 2024 y por motivo de elecciones tendremos After Office en jueves desde temprano y hasta no muy tarde, además de que viernes y sábado no se podrá abrir.<br>
+        Escucharemos:<br>
+        Pxndx ♦ My Chemical Romance ♦ The Killers ♦ The Rasmus ♦ Linkin Park ♦ Tokio Hotel ♦ Airbag y mucho más<br>
+        ★JUEVES 12 de DICIEMBRE★<br>
+        🔸 COVER 25Bs 🔸 Chicas Ingreso Libre hasta las 21:30hrs<br>
+        ★ Equinoccio abre sus puertas a las 19Hrs - 1ra Tanda de la banda a las 21Hrs ★<br>
+        ★Reserva tu mesa al cel. 77275761 - 70686051★ O haciendo clic aquí: <a href="https://bit.ly/ReservaEQUI" target="_blank">https://bit.ly/ReservaEQUI</a> ★<br>
+        LA ENTRADA AL EQUI ES CON C.I. Mayores de 18 años<br>
+        EQUINOCCIO<br>
+        Sánchez Lima 2191. Sopocachi
+    </div>
+
+    <!-- Escena 3D -->
+    <a-scene>
+        <!-- Fondo dinámico del ecualizador -->
+        <a-plane id="visualizer" position="0 2 -6" width="16" height="9" material="shader: flat; color: black;"></a-plane>
+
+        <!-- Objetos cayendo en un tubo de cristal -->
+        <a-entity id="falling-objects" position="0 10 -5">
+            <a-entity geometry="primitive: cylinder; height: 0.5; radius: 0.2" material="color: #FFF; opacity: 0.9" position="-1 0 0"
+                      animation="property: position; to: -1 -10 0; loop: true; dur: 3000; easing: linear"
+                      animation__rotate="property: rotation; to: 0 360 0; loop: true; dur: 1500"></a-entity>
+            <a-entity geometry="primitive: box; depth: 0.3; height: 0.2; width: 0.2" material="color: #FFF; opacity: 0.9" position="0 0 0"
+                      animation="property: position; to: 0 -10 0; loop: true; dur: 2500; easing: linear"
+                      animation__rotate="property: rotation; to: 360 360 0; loop: true; dur: 2000"></a-entity>
+            <a-entity geometry="primitive: sphere; radius: 0.2" material="color: #FFF; opacity: 0.9" position="1 0 0"
+                      animation="property: position; to: 1 -10 0; loop: true; dur: 4000; easing: linear"
+                      animation__rotate="property: rotation; to: 0 0 360; loop: true; dur: 1800"></a-entity>
+        </a-entity>
+
+        <!-- Tubo de cristal visual -->
+        <a-cylinder position="0 0 -5" radius="1.5" height="10" material="color: #444; opacity: 0.1"></a-cylinder>
+
+        <!-- Cámara con controles de rotación -->
+        <a-entity camera look-controls="pointerLockEnabled: true" position="0 1.6 0">
+            <a-cursor color="#FFF" opacity="0.8"></a-cursor>
+        </a-entity>
+    </a-scene>
+
+    <script>
+        const canvas = document.getElementById("audioCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const audioPlayer = document.getElementById("audioPlayer");
+        const audioFile = document.getElementById("audioFile");
+
+        let audioContext, audioSource, analyser, bufferLength, dataArray;
+
+        audioFile.addEventListener("change", function () {
+            const files = audioFile.files;
+            if (files.length === 0) return;
+
+            const audioURL = URL.createObjectURL(files[0]);
+            audioPlayer.src = audioURL;
+            audioPlayer.play();
+
+            if (!audioContext) {
+                initAudioContext();
+            }
+        });
+
+        function initAudioContext() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            audioSource = audioContext.createMediaElementSource(audioPlayer);
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+
+            analyser.fftSize = 256;
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
+            render();
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawBars();
+        }
+
+        function drawBars() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const barHeight = dataArray[i] * 1.5;
+                const radius = (barHeight / 255) * Math.min(centerX, centerY) * 0.8;
+
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = `rgba(255, 255, 255, 0.8)`;
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+    </script>
+</body>
+</html>

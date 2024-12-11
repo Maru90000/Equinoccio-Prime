@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Roquera</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> <!-- Enlace a W3.CSS -->
+    <style>
+        body {
+            background-color: #121212; /* Fondo negro para toda la página */
+            color: white; /* Texto blanco */
+        }
+        .left {
+            background-image: url('imagenes/izquierda.jpg'); /* Cambia por tu imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            height: 100vh; /* Altura completa */
+        }
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+        }
+        .carousel {
+            position: relative;
+            height: 100%; /* Altura completa del lado derecho */
+        }
+        .carousel img {
+            width: 100%;
+            height: auto;
+            display: none; /* Ocultar imágenes por defecto */
+        }
+        .active {
+            display: block; /* Mostrar la imagen activa */
+        }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10; /* Asegura que los botones estén por encima */
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="w3-black w3-padding">
+        <img src="imagenes/logo.jpg" alt="Logo" style="height: 40px; vertical-align: middle;">
+        <span class="w3-margin-right">Equinoccio</span>
+        <div class="w3-bar">
+            <a href="#" class="w3-bar-item w3-button">Home</a>
+            <a href="Equinoccio%20parallax/parallax.html" class="w3-bar-item w3-button">Parallax</a>
+            <a href="Equinoccio%20surrealista/index.htm" class="w3-bar-item w3-button">Surrealista</a>
+            <a href="Equinoccio%20Vintage/Servicios/index.html" class="w3-bar-item w3-button">Vintage</a>
+            <a href="Pagina%205%20Abstracto/Equinoccio.html" class="w3-bar-item w3-button">Abstracto</a>
+            <a href="Página%209%20RRSS%20Proyecto%20Equinoccio/RRSS.HTML" class="w3-bar-item w3-button">RRSS Proyecto</a>
+            <a href="Pagina%20Inclusiva%20Equinoccio/index.html" class="w3-bar-item w3-button">Inclusiva</a>
+            <a href="realidad%20virtual/index.html" class="w3-bar-item w3-button">Realidad Virtual</a>
+        </div>
+    </nav>
+    <div class="w3-row" style="height: calc(100vh - 60px);"> 
+        <div class="w3-col l6 left">
+            <div class="overlay">
+                <h1>31 años de Rock<br>
+                    EQUINOCCIO #PatrimonioRock<br>
+                    Sánchez Lima # 2191, Sopocachi,<br>
+                    Ciudad La Paz, La Paz, Bolivia</h1>
+                <p></p>
+            </div>
+        </div>
+        <div class="w3-col l6 w3-center">
+            <div class="carousel">
+                <img src="3.jpg" alt="Imagen 1" class="active">
+                <img src="2.jpg" alt="Imagen 2">
+                <img src="1.jpg" alt="Imagen 3">
+                <button class="carousel-button prev" onclick="changeSlide(-1)">&#10094;</button>
+                <button class="carousel-button next" onclick="changeSlide(1)">&#10095;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel img');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) {
+                currentSlide = slides.length - 1; 
+            } else if (currentSlide >= slides.length) {
+                currentSlide = 0; 
+            }
+            showSlide(currentSlide);
+        }
+
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

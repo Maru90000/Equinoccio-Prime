@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espectro Visual Abstracto para Rock</title>
+    <link rel="stylesheet" href="w3.css"> <!-- Enlace a w3.css -->
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input[type="file"] {
+            color: white;
+        }
+
+        #intro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            color: white;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="intro">Sube lo que quieras sentir</div>
+    <canvas id="audioCanvas"></canvas>
+    <div class="controls w3-center" id="controls"> <!-- Clase w3-center añadida -->
+        <input class="w3-button w3-black" type="file" id="audioFile" accept="audio/mp3" /> <!-- Botón estilizado con w3-button -->
+        <audio id="audioPlayer" controls style="display: none;"></audio>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("audioCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const audioPlayer = document.getElementById("audioPlayer");
+        const audioFile = document.getElementById("audioFile");
+        const controls = document.getElementById("controls");
+
+        let audioContext, audioSource, analyser, bufferLength, dataArray;
+
+        // Mensaje introductorio
+        const intro = document.getElementById("intro");
+        setTimeout(() => {
+            intro.style.opacity = 0;
+            setTimeout(() => intro.style.display = "none", 2000); // Desaparece después de 2 segundos de transición
+        }, 3000); // Mostrar durante 3 segundos
+
+        audioFile.addEventListener("change", function () {
+            const files = audioFile.files;
+            if (files.length === 0) return;
+
+            const audioURL = URL.createObjectURL(files[0]);
+            audioPlayer.src = audioURL;
+            audioPlayer.load();
+            audioPlayer.play();
+
+            // Ocultar el control de subida de archivo
+            controls.style.display = 'none';
+
+            if (!audioContext) {
+                initAudioContext();
+            }
+
+            // Mostrar el input para un nuevo archivo cuando la canción termina
+            audioPlayer.onended = function() {
+                controls.style.display = 'flex'; // Volver a mostrar el input
+                audioPlayer.src = ''; // Limpiar la fuente de audio
+            };
+        });
+
+        function initAudioContext() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            audioSource = audioContext.createMediaElementSource(audioPlayer);
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+            analyser.fftSize = 256;
+
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
+            render();
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawConcentricCircles(); // Solo los círculos concéntricos
+        }
+
+        // Modo de Círculos concéntricos que crecen
+        function drawConcentricCircles() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const barHeight = (dataArray[i] * 2); // Escalar más
+                const radius = (barHeight / 255) * Math.min(centerX, centerY) * 1.2; // Círculos más grandes
+
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = `rgba(${barHeight + 100}, ${barHeight + 100}, ${barHeight + 100}, 0.9)`;
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+    </script>
+</body>
+</html>

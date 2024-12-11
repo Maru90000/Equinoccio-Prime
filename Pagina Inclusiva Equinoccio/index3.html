@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Roquera</title>
+    <link rel="stylesheet" href="w3.css"> <!-- Enlace al CSS externo -->
+    <style>
+        /* Boton y panel de accesibilidad */
+        .accessibility-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #000;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .accessibility-panel {
+            position: fixed;
+            top: 50px;
+            right: 10px;
+            background-color: #000;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            z-index: 100;
+            width: 250px;
+            overflow-y: auto;
+            max-height: 400px; /* Para evitar que el panel sea demasiado alto */
+        }
+
+        .accessibility-panel button {
+            margin: 5px 0;
+            padding: 8px 12px;
+            background-color: #444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .accessibility-panel button:hover {
+            background-color: #666;
+        }
+
+        .accessibility-panel h4 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .accessibility-panel img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #555;
+            margin-bottom: 10px;
+        }
+
+        /* Navbar y estilos generales */
+        .navbar {
+            background-color: #000; 
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .navbar-title {
+            margin-right: auto;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .navbar-links {
+            display: flex;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #121212;
+            color: white;
+        }
+
+        body.light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        body.light-mode .navbar,
+        body.light-mode .accessibility-panel {
+            background-color: #eee;
+            color: #000;
+        }
+
+        body.light-mode .nav-link {
+            color: #000;
+        }
+
+        body.light-mode .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Contenido */
+        .content {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        .left {
+            background-image: url('imagenes/izquierda.jpg'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            width: 50%;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); 
+        }
+
+        .carousel-container {
+            width: 50%;
+            position: relative;
+        }
+
+        .carousel {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .carousel img.active {
+            display: block;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        /* Seccion "Nosotros" */
+        #nosotros {
+            padding: 30px;
+            margin-top: 20px;
+            background-color: #222;
+            color: white;
+            line-height: 1.8em;
+            text-align: justify;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-mode #nosotros {
+            background-color: #f9f9f9;
+            color: #000;
+        }
+
+        #nosotros h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="accessibility-btn" onclick="toggleAccessibilityPanel()">Accesibilidad</div>
+
+    <div class="accessibility-panel" id="accessibilityPanel">
+        <h3>Accesibilidad</h3>
+        <button onclick="toggleContrast()">Modo Claro Oscuro</button>
+        <button onclick="zoomIn()">Aumentar Zoom</button>
+        <button onclick="zoomOut()">Reducir Zoom</button>
+        <label>
+            Tamaño de Fuente
+            <input type="range" min="10" max="24" value="16" id="fontSizeControl" onchange="adjustFontSize(this.value)">
+        </label>
+        <h4>Daltonismo</h4>
+        <button onclick="applyColorFilter('protanopia')">Protanopia</button>
+        <img src="protanopia.jpg" alt="Simulacion de Protanopia">
+        <button onclick="applyColorFilter('deuteranopia')">Deuteranopia</button>
+        <img src="deuteranopia.jpg" alt="Simulacion de Deuteranopia">
+        <button onclick="applyColorFilter('tritanopia')">Tritanopia</button>
+        <img src="tritanopia.jpg" alt="Simulacion de Tritanopia">
+        <button onclick="resetColorFilter()">Restablecer</button>
+    </div>
+
+    <nav class="navbar">
+        <img src="imagenes/logo.jpg" alt="Logo" class="logo">
+        <span class="navbar-title">Equinoccio</span>
+        <div class="navbar-links">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Nosotros</a>
+            <a href="#" class="nav-link">Servicios</a>
+            <a href="#" class="nav-link">Blog</a>
+            <a href="#" class="nav-link">Proyectos</a>
+            <a href="#" class="nav-link">Contacto</a>
+            <a href="#" class="nav-link">Galeria</a>
+            <a href="#" class="nav-link">Testimonios</a>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <div class="left">
+            <div class="overlay">
+                <h1>31 años de Rock<br>
+                    EQUINOCCIO #PatrimonioRock<br>
+                    Sanchez Lima # 2191 Sopocachi<br>
+                    Ciudad La Paz La Paz Bolivia</h1>
+            </div>
+        </div>
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="3.jpg" alt="Imagen 1" class="active">
+                <img src="2.jpg" alt="Imagen 2">
+                <img src="1.jpg" alt="Imagen 3">
+                <button class="carousel-button prev" onclick="changeSlide(-1)">&#10094;</button>
+                <button class="carousel-button next" onclick="changeSlide(1)">&#10095;</button>
+            </div>
+        </div>
+    </div>
+
+    <section id="nosotros">
+        <h2>Sobre Nosotros</h2>
+        <p>
+            Equinoccio es mas que un bar es un legado para los amantes del rock en la ciudad de La Paz.
+            Por mas de tres decadas hemos sido un refugio para quienes buscan buena musica una atmosfera vibrante
+            y un lugar donde las historias se mezclan con el sonido electrico de guitarras y baterias.
+        </p>
+        <p>
+            Nuestra ubicacion en Sopocachi un barrio lleno de cultura y movimiento nos convierte en un punto de encuentro
+            para locales y turistas. Desde bandas emergentes hasta artistas consagrados Equinoccio ha visto desfilar talento
+            que ha dejado su marca en nuestro escenario.
+        </p>
+    </section>
+
+    <script>
+        function toggleAccessibilityPanel() {
+            const panel = document.getElementById('accessibilityPanel');
+            panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+        }
+
+        function toggleContrast() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        function zoomIn() {
+            document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) + 0.1).toString();
+        }
+
+        function zoomOut() {
+            document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) - 0.1).toString();
+        }
+
+        function adjustFontSize(size) {
+            document.body.style.fontSize = size + 'px';
+        }
+
+        function applyColorFilter(type) {
+            const nosotrosSection = document.getElementById('nosotros');
+            switch (type) {
+                case 'protanopia':
+                    nosotrosSection.style.backgroundColor = '#333';
+                    nosotrosSection.style.color = '#ff9999';
+                    break;
+                case 'deuteranopia':
+                    nosotrosSection.style.backgroundColor = '#333';
+                    nosotrosSection.style.color = '#99ff99';
+                    break;
+                case 'tritanopia':
+                    nosotrosSection.style.backgroundColor = '#333';
+                    nosotrosSection.style.color = '#9999ff';
+                    break;
+            }
+        }
+
+        function resetColorFilter() {
+            const nosotrosSection = document.getElementById('nosotros');
+            nosotrosSection.style.backgroundColor = '#222';
+            nosotrosSection.style.color = 'white';
+        }
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel img');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) {
+                currentSlide = slides.length - 1; 
+            } else if (currentSlide >= slides.length) {
+                currentSlide = 0; 
+            }
+            showSlide(currentSlide);
+        }
+
+        setInterval(() => changeSlide(1), 3000); // Cambia cada 3 segundos
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

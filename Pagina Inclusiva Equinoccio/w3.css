@@ -1,0 +1,101 @@
+body {
+    background-color: #121212; 
+    color: white; 
+    margin: 0;
+    font-family: Arial, sans-serif; /* Establecer una fuente legible */
+}
+
+.navbar {
+    background-color: #000; 
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    margin-right: 15px;
+}
+
+.navbar-title {
+    margin-right: auto; /* Empujar el título hacia la izquierda */
+    font-size: 1.5em;
+}
+
+.navbar-links {
+    display: flex; 
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.content {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+.left {
+    background-image: url('imagenes/izquierda.jpg'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    width: 50%; /* Aseguramos que ocupe la mitad de la pantalla */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.carousel-container {
+    width: 50%; /* Aseguramos que ocupe la mitad de la pantalla */
+    position: relative;
+}
+
+.carousel {
+    position: relative;
+    height: 100%; 
+    overflow: hidden; 
+}
+
+.carousel img {
+    width: 100%;      
+    height: auto;     
+    display: none;    
+}
+
+.carousel img.active {
+    display: block;  
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10; 
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}

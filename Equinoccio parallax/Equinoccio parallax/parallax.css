@@ -1,0 +1,107 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    font-size: 10px;
+
+}
+
+h2 {
+    text-align: center;
+    font-size: 50px;
+
+}
+
+p {
+    text-align: justify;
+    font-size: 25px;
+    margin: 0px 50px;
+}
+
+.navegacion {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    background-color: rgba(23, 121, 219, 0.88);
+    display: flex;
+    justify-content: space-around;
+}
+
+.navegacion a {
+    padding: 15px 0px;
+}
+
+.seccion1 {
+    background-image: url(https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/bd/bc/9a/cave-rock-bar.jpg?w=900&h=500&s=1);
+}
+
+.seccion2 {
+    background-image: url(https://www.shutterstock.com/image-photo/closeup-view-rustic-wooden-tabletop-600nw-2500473889.jpg);
+}
+
+.seccion3 {
+    background-image: url(https://bolivianexpress3.s3-us-west-1.amazonaws.com/upload/TD07UwHbMh.jpg);
+}
+
+.seccion1,
+.seccion2,
+.seccion3 {
+    height: 100vh;
+    width: 100%;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subseccion {
+    background-color: rgba(38, 130, 187, 0.78);
+    width: 500px;
+    height: 500px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+.centrar{
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+.icono {
+    width: 3em;
+    height: 3em;
+
+}
+.navbar {
+    background-color: black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar img {
+    height: 50px;
+}
+.navbar .menu {
+    display: flex;
+    gap: 20px;
+}
+.navbar .menu a {
+    color: #d8d8d8;
+    text-decoration: none;
+    font-weight: bold;
+}
+.navbar .menu a:hover {
+    color: #7f7f7f;
+}
